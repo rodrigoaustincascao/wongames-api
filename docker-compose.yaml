@@ -1,0 +1,30 @@
+version: '3'
+services:
+  strapi:
+    image: strapi/strapi
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_NAME: wongames_db
+      DATABASE_HOST: wongames_db
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: wongames
+      DATABASE_PASSWORD: wongames
+    links:
+      - wongames_db:wongames_db
+    volumes:
+      - ./app:/srv/app
+    ports:
+      - '1337:1337'
+    depends_on: 
+      - wongames_db
+
+  wongames_db:
+    image: postgres
+    environment:
+      POSTGRES_USER: wongames
+      POSTGRES_PASSWORD: wongames
+    volumes:
+      - ./data:/data/postgres
+      - ./app/dump:/home
+    ports:
+      - '5432:5432'
